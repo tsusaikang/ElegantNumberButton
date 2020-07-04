@@ -20,11 +20,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btn1 = findViewById(R.id.number_button);
-        btn1.updateColors(Color.WHITE, Color.BLACK);
         btn2 = findViewById(R.id.number_button2);
-        btn2.updateColors(Color.WHITE, Color.BLACK);
 
         textView = findViewById(R.id.text_view);
+
         btn1.setRange(1, 5);
         btn1.setOnClickListener((ElegantNumberButton.OnClickListener) view -> {
             String number = btn1.getNumber();
@@ -32,13 +31,16 @@ public class MainActivity extends AppCompatActivity {
             btn2.setNumber(number);
         });
         btn1.setOnValueChangeListener((view, oldValue, newValue) -> {
-            Log.d(TAG, String.format("oldValue: %d   newValue: %d", oldValue, newValue));
+            Log.d(TAG, String.format("oldValue: %f   newValue: %f", oldValue, newValue));
         });
 
         btn2.setOnClickListener((ElegantNumberButton.OnClickListener) view -> {
             String number = btn2.getNumber();
             textView.setText(number);
             btn1.setNumber(number);
+        });
+        btn2.setOnValueChangeListener((view, oldValue, newValue) -> {
+            Log.d(TAG, String.format("oldValue: %f   newValue: %f", oldValue, newValue));
         });
     }
 }

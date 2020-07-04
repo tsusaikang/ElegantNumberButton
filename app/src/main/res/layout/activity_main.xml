@@ -22,22 +22,39 @@
     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
         android:id="@+id/number_button"
         android:layout_width="200dp"
-        app:backGroundColor="@color/colorPrimary"
-        app:textSize="8sp"
+
         android:layout_marginTop="18dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/text_view"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        app:backGroundColor="#440000ff"
+        app:textSize="26sp"
+        app:numberUnitSize="13sp"
+        app:numberUnit="kg"
+        app:buttonSize="33dp"
+        app:buttonBackground="@drawable/background_button"
+        app:plusSignDrawable="@drawable/plus_sign"
+        app:minusSignDrawable="@drawable/plus_sign"
+        app:directionDrawable="@drawable/triangle_downward" />
 
     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
         android:id="@+id/number_button2"
         android:layout_width="match_parent"
-        app:backGroundColor="@color/colorAccent"
-        app:textSize="8sp"
-        app:initialNumber="10"
-        app:finalNumber="20"
+
         android:layout_marginTop="18dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/number_button"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        app:backGroundColor="#00ff00"
+        app:textSize="40sp"
+        app:numberUnit="kg"
+        app:initialNumber="10"
+        app:finalNumber="20"
+        app:buttonSize="50dp"
+        app:buttonBackground="@drawable/background_button"
+        app:plusSignDrawable="@drawable/plus_sign"
+        app:minusSignDrawable="@drawable/plus_sign"
+        app:directionDrawable="@drawable/triangle_upward" />
 </RelativeLayout>

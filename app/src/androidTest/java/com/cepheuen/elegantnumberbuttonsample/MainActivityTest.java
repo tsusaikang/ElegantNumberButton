@@ -29,7 +29,7 @@ public class MainActivityTest {
     public void test_add_button_click() {
         try {
             // Change btn1 text to find it with ViewMatchers
-            rule.runOnUiThread(() -> activity.btn1.addBtn.setText("target"));
+            rule.runOnUiThread(() -> activity.btn1.ivPlusButton.setText("target"));
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

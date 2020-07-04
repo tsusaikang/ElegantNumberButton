@@ -3,33 +3,51 @@ package com.cepheuen.elegantnumberbutton.view;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.cepheuen.elegantnumberbutton.R;
+
+import static android.util.TypedValue.COMPLEX_UNIT_PX;
 
 /**
  * Created by Ashik Vetrivelu on 10/08/16.
  */
 public class ElegantNumberButton extends RelativeLayout {
     private Context context;
-    private AttributeSet attrs;
-    private int styleAttr;
+
     private OnClickListener mListener;
-    private int initialNumber;
-    private int lastNumber;
-    private int currentNumber;
-    private int finalNumber;
+    private int styleAttr;
+
+    private AttributeSet attrs;
+    private int backgroundColor;
+    private float initialNumber;
+    private float lastNumber;
+    private String numberUnit;
+    private float currentNumber;
+    private float finalNumber;
+
+    //layout
     private TextView textView;
+    private TextView tvNumberUnit;
+    public ImageView ivPlusButton;
+    public ImageView ivMinusButton;
+    public ImageView ivDirection;
+
+
+
+
     private OnValueChangeListener mOnValueChangeListener;
 
-    public Button addBtn, subtractBtn;
+
 
     public ElegantNumberButton(Context context) {
         super(context);
@@ -55,56 +73,86 @@ public class ElegantNumberButton extends RelativeLayout {
     private void initView() {
         inflate(context, R.layout.layout, this);
         final Resources res = getResources();
-        final int defaultColor = res.getColor(R.color.colorPrimary);
-        final int defaultTextColor = res.getColor(R.color.colorText);
-        final Drawable defaultDrawable = res.getDrawable(R.drawable.background);
 
+        // [ATTRIBUTE]
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ElegantNumberButton,
                 styleAttr, 0);
+        backgroundColor = a.getColor(R.styleable.ElegantNumberButton_backGroundColor, res.getColor(R.color.colorWhite));
+        initialNumber = a.getFloat(R.styleable.ElegantNumberButton_initialNumber, 0);
+        finalNumber = a.getFloat(R.styleable.ElegantNumberButton_finalNumber, Float.MAX_VALUE);
+        numberUnit = a.getString(R.styleable.ElegantNumberButton_numberUnit);
+        int textColor = a.getColor(R.styleable.ElegantNumberButton_textColor, res.getColor(android.R.color.black));
+        int textSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_textSize,
+                (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 26, context.getResources().getDisplayMetrics()));
+        int numberUnitSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_numberUnitSize,textSize / 2);
+        Drawable buttonBackground = a.getDrawable(R.styleable.ElegantNumberButton_buttonBackground);
+        Drawable plusSignDrawable = a.getDrawable(R.styleable.ElegantNumberButton_plusSignDrawable);
+        Drawable minusSignDrawable = a.getDrawable(R.styleable.ElegantNumberButton_minusSignDrawable);
+        Drawable directionDrawable = a.getDrawable(R.styleable.ElegantNumberButton_directionDrawable);
+        int buttonSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_buttonSize,
+                (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 33, context.getResources().getDisplayMetrics()));
 
-        initialNumber = a.getInt(R.styleable.ElegantNumberButton_initialNumber, 0);
-        finalNumber = a.getInt(R.styleable.ElegantNumberButton_finalNumber, Integer.MAX_VALUE);
-        float textSize = a.getDimension(R.styleable.ElegantNumberButton_textSize, 13);
-        int color = a.getColor(R.styleable.ElegantNumberButton_backGroundColor, defaultColor);
-        int textColor = a.getColor(R.styleable.ElegantNumberButton_textColor, defaultTextColor);
-        Drawable drawable = a.getDrawable(R.styleable.ElegantNumberButton_backgroundDrawable);
-
-        subtractBtn = findViewById(R.id.subtract_btn);
-        addBtn = findViewById(R.id.add_btn);
-        textView = findViewById(R.id.number_counter);
+        // [LAYOUT]
+        // layout variable initialize
         LinearLayout mLayout = findViewById(R.id.layout);
+        ivMinusButton = findViewById(R.id.ivMinusButton);
+        ivPlusButton = findViewById(R.id.ivPlusButton);
+        textView = findViewById(R.id.number_counter);
+        tvNumberUnit = findViewById(R.id.number_unit);
+        ivDirection = findViewById(R.id.ivDirection);
 
-        subtractBtn.setTextColor(textColor);
-        addBtn.setTextColor(textColor);
-        textView.setTextColor(textColor);
-        subtractBtn.setTextSize(textSize);
-        addBtn.setTextSize(textSize);
-        textView.setTextSize(textSize);
+        // Root
+        mLayout.setBackgroundColor(backgroundColor);
 
-        if (drawable == null) {
-            drawable = defaultDrawable;
+        // button
+        if (minusSignDrawable != null)
+            ivMinusButton.setImageDrawable(minusSignDrawable);
+        if (plusSignDrawable != null)
+            ivPlusButton.setImageDrawable(plusSignDrawable);
+        if (buttonBackground != null) {
+            ivPlusButton.setBackground(buttonBackground);
+            ivPlusButton.setLayoutParams(new LinearLayout.LayoutParams((int)buttonSize,(int)buttonSize));
+            ivMinusButton.setBackground(buttonBackground);
+            ivMinusButton.setLayoutParams(new LinearLayout.LayoutParams((int)buttonSize,(int)buttonSize));
         }
-        assert drawable != null;
-        drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC));
-        mLayout.setBackground(drawable);
 
+        // direction
+        if (directionDrawable != null) {
+            ivDirection.setImageDrawable(directionDrawable);
+        }
+
+        // text
         textView.setText(String.valueOf(initialNumber));
+        textView.setTextColor(textColor);
+        if (!TextUtils.isEmpty(numberUnit)) {
+            tvNumberUnit.setVisibility(VISIBLE);
+            tvNumberUnit.setText(numberUnit);
+            tvNumberUnit.setTextColor(textColor);
+        }
+        textView.setTextSize(COMPLEX_UNIT_PX,textSize);
+        tvNumberUnit.setTextSize(COMPLEX_UNIT_PX,numberUnitSize);
+        ViewGroup.LayoutParams p = tvNumberUnit.getLayoutParams();
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)p;
+        lp.setMargins(0, (textSize-numberUnitSize)*4/10, 0, 0);
+        tvNumberUnit.setLayoutParams(lp);
 
+        // [VARIABLE]
         currentNumber = initialNumber;
         lastNumber = initialNumber;
 
-        subtractBtn.setOnClickListener(new View.OnClickListener() {
+        // [LISTENER]
+        ivMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View mView) {
-                int num = Integer.valueOf(textView.getText().toString());
-                setNumber(String.valueOf(num - 1), true);
+                float num = Float.valueOf(textView.getText().toString());
+                setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), true);
             }
         });
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        ivPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View mView) {
-                int num = Integer.valueOf(textView.getText().toString());
-                setNumber(String.valueOf(num + 1), true);
+                float num = Float.valueOf(textView.getText().toString());
+                setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), true);
             }
         });
         a.recycle();
@@ -128,7 +176,7 @@ public class ElegantNumberButton extends RelativeLayout {
 
     public void setNumber(String number) {
         lastNumber = currentNumber;
-        this.currentNumber = Integer.parseInt(number);
+        this.currentNumber = Float.parseFloat(number);
         if (this.currentNumber > finalNumber) {
             this.currentNumber = finalNumber;
         }
@@ -159,27 +207,11 @@ public class ElegantNumberButton extends RelativeLayout {
     }
 
     public interface OnValueChangeListener {
-        void onValueChange(ElegantNumberButton view, int oldValue, int newValue);
+        void onValueChange(ElegantNumberButton view, float oldValue, float newValue);
     }
 
-    public void setRange(Integer startingNumber, Integer endingNumber) {
+    public void setRange(float startingNumber, float endingNumber) {
         this.initialNumber = startingNumber;
         this.finalNumber = endingNumber;
-    }
-
-    public void updateColors(int backgroundColor, int textColor) {
-        this.textView.setBackgroundColor(backgroundColor);
-        this.addBtn.setBackgroundColor(backgroundColor);
-        this.subtractBtn.setBackgroundColor(backgroundColor);
-
-        this.textView.setTextColor(textColor);
-        this.addBtn.setTextColor(textColor);
-        this.subtractBtn.setTextColor(textColor);
-    }
-
-    public void updateTextSize(int unit, float newSize) {
-        this.textView.setTextSize(unit, newSize);
-        this.addBtn.setTextSize(unit, newSize);
-        this.subtractBtn.setTextSize(unit, newSize);
     }
 }
