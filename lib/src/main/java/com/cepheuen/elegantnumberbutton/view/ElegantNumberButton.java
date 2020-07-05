@@ -234,11 +234,16 @@ public class ElegantNumberButton extends RelativeLayout {
     public void setNumber(String number) {
         lastNumber = currentNumber;
         this.currentNumber = Float.parseFloat(number);
-        if (this.currentNumber > finalNumber) {
-            this.currentNumber = finalNumber;
-        }
-        if (this.currentNumber < initialNumber) {
-            this.currentNumber = initialNumber;
+        if (initialNumber < finalNumber) {
+            if (this.currentNumber > finalNumber)
+                this.currentNumber = finalNumber;
+            if (this.currentNumber < initialNumber)
+                this.currentNumber = initialNumber;
+        } else {
+            if (this.currentNumber < finalNumber)
+                this.currentNumber = finalNumber;
+            if (this.currentNumber > initialNumber)
+                this.currentNumber = initialNumber;
         }
         textView.setText(String.valueOf(hideSign ? Math.abs(currentNumber) : currentNumber));
     }
@@ -270,5 +275,6 @@ public class ElegantNumberButton extends RelativeLayout {
     public void setRange(float startingNumber, float endingNumber) {
         this.initialNumber = startingNumber;
         this.finalNumber = endingNumber;
+        setNumber(String.valueOf(initialNumber), true);
     }
 }
