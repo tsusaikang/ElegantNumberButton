@@ -18,6 +18,8 @@
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:padding="8dp"
+            android:clickable="true"
+
             tools:background="@drawable/background_button"
             tools:src="@drawable/plus_sign"
             tools:layout_height="33dp"
@@ -79,6 +81,8 @@
             android:layout_width="33dp"
             android:layout_height="33dp"
             android:padding="8dp"
+            android:clickable="true"
+
             tools:background="@drawable/background_button"
             tools:src="@drawable/plus_sign"
             tools:layout_height="33dp"

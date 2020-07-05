@@ -28,8 +28,8 @@
         android:layout_below="@id/text_view"
         android:layout_height="wrap_content"
 
-        app:backGroundColor="#440000ff"
-        app:textSize="26sp"
+        app:backgroundColor="#440000ff"
+        app:numberTextSize="26sp"
         app:numberUnitSize="13sp"
         app:numberUnit="kg"
         app:buttonSize="33dp"
@@ -47,8 +47,8 @@
         android:layout_below="@id/number_button"
         android:layout_height="wrap_content"
 
-        app:backGroundColor="#00ff00"
-        app:textSize="40sp"
+        app:backgroundColor="#00ff00"
+        app:numberTextSize="40sp"
         app:numberUnit="kg"
         app:initialNumber="10"
         app:finalNumber="20"

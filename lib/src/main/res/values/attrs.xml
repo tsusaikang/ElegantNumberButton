@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ElegantNumberButton">
-        <attr name="backGroundColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+
         <attr name="initialNumber" format="float"/>
         <attr name="finalNumber" format="float" />
         <attr name="numberUnit" format="string" />
-        <attr name="textColor" format="color"/>
-        <attr name="textSize" format="dimension"/>
+
+        <attr name="numberColor" format="color"/>
+        <attr name="numberTextSize" format="dimension"/>
         <attr name="numberUnitSize" format="dimension" />
+
         <attr name="buttonBackground" format="reference"/>
         <attr name="buttonSize" format="dimension"/>
+
         <attr name="plusSignDrawable" format="reference"/>
         <attr name="minusSignDrawable" format="reference"/>
+
         <attr name="directionDrawable" format="reference" />
     </declare-styleable>
 </resources>

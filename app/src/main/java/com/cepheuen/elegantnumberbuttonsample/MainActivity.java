@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener((ElegantNumberButton.OnClickListener) view -> {
             String number = btn1.getNumber();
             textView.setText(number);
-            btn2.setNumber(number);
+            btn1.setNumber(number);
         });
         btn1.setOnValueChangeListener((view, oldValue, newValue) -> {
             Log.d(TAG, String.format("oldValue: %f   newValue: %f", oldValue, newValue));
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         btn2.setOnClickListener((ElegantNumberButton.OnClickListener) view -> {
             String number = btn2.getNumber();
             textView.setText(number);
-            btn1.setNumber(number);
+            btn2.setNumber(number);
         });
         btn2.setOnValueChangeListener((view, oldValue, newValue) -> {
             Log.d(TAG, String.format("oldValue: %f   newValue: %f", oldValue, newValue));

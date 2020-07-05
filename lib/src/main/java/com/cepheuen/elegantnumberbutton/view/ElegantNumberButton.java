@@ -1,12 +1,15 @@
 package com.cepheuen.elegantnumberbutton.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -70,6 +73,7 @@ public class ElegantNumberButton extends RelativeLayout {
         initView();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         inflate(context, R.layout.layout, this);
         final Resources res = getResources();
@@ -77,12 +81,12 @@ public class ElegantNumberButton extends RelativeLayout {
         // [ATTRIBUTE]
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ElegantNumberButton,
                 styleAttr, 0);
-        backgroundColor = a.getColor(R.styleable.ElegantNumberButton_backGroundColor, res.getColor(R.color.colorWhite));
+        backgroundColor = a.getColor(R.styleable.ElegantNumberButton_backgroundColor, res.getColor(R.color.colorWhite));
         initialNumber = a.getFloat(R.styleable.ElegantNumberButton_initialNumber, 0);
         finalNumber = a.getFloat(R.styleable.ElegantNumberButton_finalNumber, Float.MAX_VALUE);
         numberUnit = a.getString(R.styleable.ElegantNumberButton_numberUnit);
-        int textColor = a.getColor(R.styleable.ElegantNumberButton_textColor, res.getColor(android.R.color.black));
-        int textSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_textSize,
+        int textColor = a.getColor(R.styleable.ElegantNumberButton_numberColor, res.getColor(android.R.color.black));
+        int textSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_numberTextSize,
                 (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 26, context.getResources().getDisplayMetrics()));
         int numberUnitSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_numberUnitSize,textSize / 2);
         Drawable buttonBackground = a.getDrawable(R.styleable.ElegantNumberButton_buttonBackground);
@@ -101,10 +105,10 @@ public class ElegantNumberButton extends RelativeLayout {
         tvNumberUnit = findViewById(R.id.number_unit);
         ivDirection = findViewById(R.id.ivDirection);
 
-        // Root
+        // layout:RootView
         mLayout.setBackgroundColor(backgroundColor);
 
-        // button
+        // layout:button
         if (minusSignDrawable != null)
             ivMinusButton.setImageDrawable(minusSignDrawable);
         if (plusSignDrawable != null)
@@ -116,12 +120,16 @@ public class ElegantNumberButton extends RelativeLayout {
             ivMinusButton.setLayoutParams(new LinearLayout.LayoutParams((int)buttonSize,(int)buttonSize));
         }
 
-        // direction
+        // layout:direction
         if (directionDrawable != null) {
             ivDirection.setImageDrawable(directionDrawable);
+            ViewGroup.LayoutParams lp = ivDirection.getLayoutParams();
+            lp.width = (int)buttonSize/4;
+            lp.height = (int)buttonSize/4;
+            ivDirection.setLayoutParams(lp);
         }
 
-        // text
+        // layout:text
         textView.setText(String.valueOf(initialNumber));
         textView.setTextColor(textColor);
         if (!TextUtils.isEmpty(numberUnit)) {
@@ -141,21 +149,68 @@ public class ElegantNumberButton extends RelativeLayout {
         lastNumber = initialNumber;
 
         // [LISTENER]
-        ivMinusButton.setOnClickListener(new View.OnClickListener() {
+        ivMinusButton.setOnLongClickListener(new OnLongClickListener() {
             @Override
-            public void onClick(View mView) {
-                float num = Float.valueOf(textView.getText().toString());
-                setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), true);
+            public boolean onLongClick(View v) {
+                mOnLongPressDecrement = true;
+                repeatUpdateHandler.post (new RptUpdater() );
+                return false;
             }
         });
-        ivPlusButton.setOnClickListener(new View.OnClickListener() {
+        ivMinusButton.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onClick(View mView) {
-                float num = Float.valueOf(textView.getText().toString());
-                setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), true);
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mOnLongPressDecrement = false;
+                        float num = Float.valueOf(textView.getText().toString());
+                        setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), true);
+                }
+                return false;
+            }
+        });
+        ivPlusButton.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mOnLongPressIncrement = true;
+                repeatUpdateHandler.post (new RptUpdater() );
+                return false;
+            }
+        });
+        ivPlusButton.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mOnLongPressIncrement = false;
+                        float num = Float.valueOf(textView.getText().toString());
+                        setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), true);
+                }
+                return false;
             }
         });
         a.recycle();
+    }
+    private boolean mOnLongPressIncrement = false;
+    private boolean mOnLongPressDecrement = false;
+    private Handler repeatUpdateHandler = new Handler();
+    private int REP_DELAY = 100;
+    class RptUpdater implements Runnable {
+        @Override
+        public void run() {
+            if (mOnLongPressIncrement) {
+                float num = Float.valueOf(textView.getText().toString());
+                setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), false);
+                repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+            } else if (mOnLongPressDecrement) {
+                float num = Float.valueOf(textView.getText().toString());
+                setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), false);
+                repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
+            }
+        }
     }
 
     private void callListener(View view) {
