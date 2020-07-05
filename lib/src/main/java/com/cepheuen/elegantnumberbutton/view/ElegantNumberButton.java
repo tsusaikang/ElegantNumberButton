@@ -133,8 +133,6 @@ public class ElegantNumberButton extends RelativeLayout {
 
         // layout:text
         setNumber(String.valueOf(initialNumber), true);
-//        textView.setText(String.valueOf(initialNumber));
-        setNumber(String.valueOf(initialNumber), true);
         textView.setTextColor(textColor);
         if (!TextUtils.isEmpty(numberUnit)) {
             tvNumberUnit.setVisibility(VISIBLE);
@@ -169,7 +167,6 @@ public class ElegantNumberButton extends RelativeLayout {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         mOnLongPressDecrement = false;
-//                        float num = Float.valueOf(textView.getText().toString());
                         float num = currentNumber;
                         setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), true);
                 }
@@ -191,7 +188,6 @@ public class ElegantNumberButton extends RelativeLayout {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         mOnLongPressIncrement = false;
-//                        float num = Float.valueOf(textView.getText().toString());
                         float num = currentNumber;
                         setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), true);
                 }
@@ -208,12 +204,10 @@ public class ElegantNumberButton extends RelativeLayout {
         @Override
         public void run() {
             if (mOnLongPressIncrement) {
-//                float num = Float.valueOf(textView.getText().toString());
                 float num = currentNumber;
                 setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), false);
                 repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             } else if (mOnLongPressDecrement) {
-//                float num = Float.valueOf(textView.getText().toString());
                 float num = currentNumber;
                 setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), false);
                 repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
