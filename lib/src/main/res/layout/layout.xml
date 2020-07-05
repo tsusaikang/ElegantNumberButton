@@ -20,8 +20,8 @@
             android:padding="8dp"
             android:clickable="true"
 
-            tools:background="@drawable/background_button"
-            tools:src="@drawable/plus_sign"
+            tools:background="@drawable/bg_increment_decrement_btn"
+            tools:src="@drawable/increment_sign"
             tools:layout_height="33dp"
             tools:layout_width="33dp"/>
     </LinearLayout>
@@ -83,8 +83,8 @@
             android:padding="8dp"
             android:clickable="true"
 
-            tools:background="@drawable/background_button"
-            tools:src="@drawable/plus_sign"
+            tools:background="@drawable/bg_increment_decrement_btn"
+            tools:src="@drawable/increment_sign"
             tools:layout_height="33dp"
             tools:layout_width="33dp"/>
     </LinearLayout>

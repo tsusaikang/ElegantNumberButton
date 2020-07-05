@@ -6,6 +6,7 @@
         <attr name="initialNumber" format="float"/>
         <attr name="finalNumber" format="float" />
         <attr name="numberUnit" format="string" />
+        <attr name="hideSign" format="boolean" />
 
         <attr name="numberColor" format="color"/>
         <attr name="numberTextSize" format="dimension"/>

@@ -35,6 +35,7 @@ public class ElegantNumberButton extends RelativeLayout {
     private float initialNumber;
     private float lastNumber;
     private String numberUnit;
+    private Boolean hideSign;
     private float currentNumber;
     private float finalNumber;
 
@@ -81,10 +82,11 @@ public class ElegantNumberButton extends RelativeLayout {
         // [ATTRIBUTE]
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ElegantNumberButton,
                 styleAttr, 0);
-        backgroundColor = a.getColor(R.styleable.ElegantNumberButton_backgroundColor, res.getColor(R.color.colorWhite));
+        backgroundColor = a.getColor(R.styleable.ElegantNumberButton_backgroundColor, res.getColor(R.color.white));
         initialNumber = a.getFloat(R.styleable.ElegantNumberButton_initialNumber, 0);
         finalNumber = a.getFloat(R.styleable.ElegantNumberButton_finalNumber, Float.MAX_VALUE);
         numberUnit = a.getString(R.styleable.ElegantNumberButton_numberUnit);
+        hideSign = a.getBoolean(R.styleable.ElegantNumberButton_hideSign, true);
         int textColor = a.getColor(R.styleable.ElegantNumberButton_numberColor, res.getColor(android.R.color.black));
         int textSize = a.getDimensionPixelSize(R.styleable.ElegantNumberButton_numberTextSize,
                 (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 26, context.getResources().getDisplayMetrics()));
@@ -130,7 +132,9 @@ public class ElegantNumberButton extends RelativeLayout {
         }
 
         // layout:text
-        textView.setText(String.valueOf(initialNumber));
+        setNumber(String.valueOf(initialNumber), true);
+//        textView.setText(String.valueOf(initialNumber));
+        setNumber(String.valueOf(initialNumber), true);
         textView.setTextColor(textColor);
         if (!TextUtils.isEmpty(numberUnit)) {
             tvNumberUnit.setVisibility(VISIBLE);
@@ -165,7 +169,8 @@ public class ElegantNumberButton extends RelativeLayout {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         mOnLongPressDecrement = false;
-                        float num = Float.valueOf(textView.getText().toString());
+//                        float num = Float.valueOf(textView.getText().toString());
+                        float num = currentNumber;
                         setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), true);
                 }
                 return false;
@@ -186,7 +191,8 @@ public class ElegantNumberButton extends RelativeLayout {
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
                         mOnLongPressIncrement = false;
-                        float num = Float.valueOf(textView.getText().toString());
+//                        float num = Float.valueOf(textView.getText().toString());
+                        float num = currentNumber;
                         setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), true);
                 }
                 return false;
@@ -202,11 +208,13 @@ public class ElegantNumberButton extends RelativeLayout {
         @Override
         public void run() {
             if (mOnLongPressIncrement) {
-                float num = Float.valueOf(textView.getText().toString());
+//                float num = Float.valueOf(textView.getText().toString());
+                float num = currentNumber;
                 setNumber(String.valueOf(Math.round((num + 0.1)*10.0f)/10.0f), false);
                 repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             } else if (mOnLongPressDecrement) {
-                float num = Float.valueOf(textView.getText().toString());
+//                float num = Float.valueOf(textView.getText().toString());
+                float num = currentNumber;
                 setNumber(String.valueOf(Math.round((num - 0.1)*10.0f)/10.0f), false);
                 repeatUpdateHandler.postDelayed(new RptUpdater(), REP_DELAY);
             }
@@ -238,7 +246,7 @@ public class ElegantNumberButton extends RelativeLayout {
         if (this.currentNumber < initialNumber) {
             this.currentNumber = initialNumber;
         }
-        textView.setText(String.valueOf(currentNumber));
+        textView.setText(String.valueOf(hideSign ? Math.abs(currentNumber) : currentNumber));
     }
 
     public void setNumber(String number, boolean notifyListener) {

@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.text_view);
 
-        btn1.setRange(1, 5);
+        btn1.setRange(-20, 20);
         btn1.setOnClickListener((ElegantNumberButton.OnClickListener) view -> {
             String number = btn1.getNumber();
             textView.setText(number);

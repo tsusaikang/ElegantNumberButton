@@ -33,9 +33,9 @@
         app:numberUnitSize="13sp"
         app:numberUnit="kg"
         app:buttonSize="33dp"
-        app:buttonBackground="@drawable/background_button"
-        app:plusSignDrawable="@drawable/plus_sign"
-        app:minusSignDrawable="@drawable/plus_sign"
+        app:buttonBackground="@drawable/bg_increment_decrement_btn"
+        app:plusSignDrawable="@drawable/increment_sign_default"
+        app:minusSignDrawable="@drawable/increment_sign_default"
         app:directionDrawable="@drawable/triangle_downward" />
 
     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
@@ -50,11 +50,12 @@
         app:backgroundColor="#00ff00"
         app:numberTextSize="40sp"
         app:numberUnit="kg"
-        app:initialNumber="10"
+        app:hideSign="false"
+        app:initialNumber="-20"
         app:finalNumber="20"
         app:buttonSize="50dp"
-        app:buttonBackground="@drawable/background_button"
-        app:plusSignDrawable="@drawable/plus_sign"
-        app:minusSignDrawable="@drawable/plus_sign"
+        app:buttonBackground="@drawable/bg_increment_decrement_btn"
+        app:plusSignDrawable="@drawable/increment_sign_default"
+        app:minusSignDrawable="@drawable/increment_sign_default"
         app:directionDrawable="@drawable/triangle_upward" />
 </RelativeLayout>
